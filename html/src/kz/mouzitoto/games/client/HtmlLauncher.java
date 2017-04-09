@@ -3,7 +3,7 @@ package kz.mouzitoto.games.client;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.backends.gwt.GwtApplication;
 import com.badlogic.gdx.backends.gwt.GwtApplicationConfiguration;
-import kz.mouzitoto.games.DGClient;
+import kz.mouzitoto.games.network.DGClient;
 
 public class HtmlLauncher extends GwtApplication {
 

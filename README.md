@@ -1,0 +1,2 @@
+# DurakGameClient
+Durak Game Client

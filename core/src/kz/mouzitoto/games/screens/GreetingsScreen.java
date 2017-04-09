@@ -12,7 +12,14 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.esotericsoftware.kryo.Kryo;
+import com.esotericsoftware.kryonet.Client;
+import kz.mouzitoto.games.game.MsgState;
+import kz.mouzitoto.games.network.BroadCastMsg;
 import kz.mouzitoto.games.network.DGClient;
+import kz.mouzitoto.games.network.PrivateMsg;
+
+import java.io.IOException;
 
 
 /**
@@ -46,23 +53,54 @@ public class GreetingsScreen implements Screen {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 Gdx.app.log("enterButton", userNameInput.getText());
+
+                try {
+                    connectToServer(userNameInput.getText());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
                 return false;
             }
         });
         stage.addActor(enterButton);
 
+        //todo: add label at the bottom, for exception messages
+
         Gdx.input.setInputProcessor(stage);
     }
 
+    private void connectToServer(String userName) throws IOException {
+        Client client = new Client();
+        client.start();
+        client.connect(5000, "127.0.0.1", 27015);
 
-    @Override
-    public void show() {
+        Kryo kryo = client.getKryo();
+        kryo.register(PrivateMsg.class);
+        kryo.register(BroadCastMsg.class);
+        kryo.register(MsgState.class);
 
+        PrivateMsg privateMsg = new PrivateMsg();
+        privateMsg.setMsgState(MsgState.NEW_PLAYER);
+        privateMsg.setMsg(userName);
+
+        client.sendTCP(privateMsg);
     }
+
+
+
+
 
     @Override
     public void render(float delta) {
         stage.draw();
+    }
+
+
+    //<editor-fold desc="Unused implemented methods">
+    @Override
+    public void show() {
+
     }
 
     @Override
@@ -89,4 +127,5 @@ public class GreetingsScreen implements Screen {
     public void dispose() {
 
     }
+    //</editor-fold>
 }

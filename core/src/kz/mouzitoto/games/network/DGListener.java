@@ -44,6 +44,7 @@ public class DGListener extends Listener {
     }
 
     private void roomsInfo(PrivateMsg privateMsg) {
+        //todo: user RoomInfo class
         Type roomsListType = new TypeToken<List<Room>>(){}.getType();
         List<Room> rooms = gson.fromJson(privateMsg.getMsg(), roomsListType);
 

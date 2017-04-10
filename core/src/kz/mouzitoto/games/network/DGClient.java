@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.Client;
 import kz.mouzitoto.games.game.MsgState;
+import kz.mouzitoto.games.game.Player;
 import kz.mouzitoto.games.screens.GreetingsScreen;
 
 public class DGClient extends Game {
@@ -14,11 +15,14 @@ public class DGClient extends Game {
 	private OrthographicCamera cam;
 	private Client client;
 	private DGListener dgListener;
+	private Player player;
 
 	@Override
 	public void create () {
-		spriteBatch = new SpriteBatch();
-		cam = new OrthographicCamera(480, 600);
+		this.spriteBatch = new SpriteBatch();
+		this.cam = new OrthographicCamera(480, 600);
+
+		this.player = new Player();
 
 		createNetworkClient();
 
@@ -30,7 +34,7 @@ public class DGClient extends Game {
 		this.client = new Client();
 		this.client.start();
 
-		this.dgListener = new DGListener();
+		this.dgListener = new DGListener(this);
 		this.client.addListener(this.dgListener);
 
 		Kryo kryo = this.client.getKryo();
@@ -45,5 +49,9 @@ public class DGClient extends Game {
 
 	public DGListener getDgListener() {
 		return dgListener;
+	}
+
+	public Player getPlayer() {
+		return player;
 	}
 }

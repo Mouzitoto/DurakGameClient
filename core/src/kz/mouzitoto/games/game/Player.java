@@ -9,10 +9,10 @@ import java.util.List;
  * Created by Mouzitoto on 20.03.2017.
  */
 public class Player {
-    String id;
-    String name;
-    List<Card> cards;
-    Connection connection;
+    private String id;
+    private String name;
+    private List<Card> cards;
+    private Connection connection;
 
     public Player() {
         cards = new ArrayList<>();

@@ -51,6 +51,7 @@ public class GreetingsScreen implements Screen {
 
                 try {
                     connectToServer(dgClient, userNameInput.getText());
+                    dgClient.getPlayer().setName(userNameInput.getText());
                     LobbyScreen lobbyScreen = new LobbyScreen(dgClient, spriteBatch, cam);
                     dgClient.setScreen(lobbyScreen);
                     dgClient.getDgListener().setLobbyScreen(lobbyScreen);

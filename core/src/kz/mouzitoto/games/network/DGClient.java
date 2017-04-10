@@ -13,6 +13,7 @@ public class DGClient extends Game {
 	private SpriteBatch spriteBatch;
 	private OrthographicCamera cam;
 	private Client client;
+	private DGListener dgListener;
 
 	@Override
 	public void create () {
@@ -29,6 +30,9 @@ public class DGClient extends Game {
 		this.client = new Client();
 		this.client.start();
 
+		this.dgListener = new DGListener();
+		this.client.addListener(this.dgListener);
+
 		Kryo kryo = this.client.getKryo();
 		kryo.register(PrivateMsg.class);
 		kryo.register(BroadCastMsg.class);
@@ -39,7 +43,7 @@ public class DGClient extends Game {
 		return client;
 	}
 
-	public void setClient(Client client) {
-		this.client = client;
+	public DGListener getDgListener() {
+		return dgListener;
 	}
 }

@@ -51,7 +51,9 @@ public class GreetingsScreen implements Screen {
 
                 try {
                     connectToServer(dgClient, userNameInput.getText());
-                    dgClient.setScreen(new LobbyScreen(dgClient, spriteBatch, cam));
+                    LobbyScreen lobbyScreen = new LobbyScreen(dgClient, spriteBatch, cam);
+                    dgClient.setScreen(lobbyScreen);
+                    dgClient.getDgListener().setLobbyScreen(lobbyScreen);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

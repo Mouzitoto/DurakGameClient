@@ -30,8 +30,11 @@ public class GreetingsScreen implements Screen {
     SpriteBatch spriteBatch;
     OrthographicCamera cam;
     Stage stage;
+    Client client;
 
     public GreetingsScreen(DGClient dgClient, SpriteBatch spriteBatch, OrthographicCamera cam) {
+        createNetworkClient();
+
         this.dgClient = dgClient;
         this.spriteBatch = spriteBatch;
         this.cam = cam;
@@ -70,21 +73,24 @@ public class GreetingsScreen implements Screen {
         Gdx.input.setInputProcessor(stage);
     }
 
-    private void connectToServer(String userName) throws IOException {
-        Client client = new Client();
-        client.start();
-        client.connect(5000, "127.0.0.1", 27015);
+    private void createNetworkClient() {
+        this.client = new Client();
+        this.client.start();
 
-        Kryo kryo = client.getKryo();
+        Kryo kryo = this.client.getKryo();
         kryo.register(PrivateMsg.class);
         kryo.register(BroadCastMsg.class);
         kryo.register(MsgState.class);
+    }
+
+    private void connectToServer(String userName) throws IOException {
+        this.client.connect(5000, "127.0.0.1", 27015);
 
         PrivateMsg privateMsg = new PrivateMsg();
         privateMsg.setMsgState(MsgState.NEW_PLAYER);
         privateMsg.setMsg(userName);
 
-        client.sendTCP(privateMsg);
+        this.client.sendTCP(privateMsg);
     }
 
 

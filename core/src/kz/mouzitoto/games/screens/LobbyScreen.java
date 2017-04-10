@@ -10,6 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import kz.mouzitoto.games.game.Room;
+import kz.mouzitoto.games.game.RoomInfo;
 import kz.mouzitoto.games.network.DGClient;
 
 import java.util.List;
@@ -22,7 +23,7 @@ public class LobbyScreen implements Screen {
     private SpriteBatch spriteBatch;
     private OrthographicCamera cam;
     private Stage stage;
-    private List<Room> rooms;
+    private List<RoomInfo> rooms;
 
     public LobbyScreen(DGClient dgClient, SpriteBatch spriteBatch, OrthographicCamera cam) {
         this.spriteBatch = spriteBatch;
@@ -91,7 +92,7 @@ public class LobbyScreen implements Screen {
 
     }
 
-    public void setRooms(List<Room> rooms) {
+    public void setRooms(List<RoomInfo> rooms) {
         this.rooms = rooms;
     }
 }

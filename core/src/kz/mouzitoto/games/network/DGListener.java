@@ -6,6 +6,7 @@ import com.esotericsoftware.kryonet.Listener;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import kz.mouzitoto.games.game.Room;
+import kz.mouzitoto.games.game.RoomInfo;
 import kz.mouzitoto.games.screens.LobbyScreen;
 
 import java.lang.reflect.Type;
@@ -45,8 +46,8 @@ public class DGListener extends Listener {
 
     private void roomsInfo(PrivateMsg privateMsg) {
         //todo: user RoomInfo class
-        Type roomsListType = new TypeToken<List<Room>>(){}.getType();
-        List<Room> rooms = gson.fromJson(privateMsg.getMsg(), roomsListType);
+        Type roomsInfoListType = new TypeToken<List<RoomInfo>>(){}.getType();
+        List<RoomInfo> rooms = gson.fromJson(privateMsg.getMsg(), roomsInfoListType);
 
         Gdx.app.log("roomsInfo", privateMsg.getMsg());
 

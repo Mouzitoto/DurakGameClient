@@ -2,6 +2,7 @@ package kz.mouzitoto.games.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -26,28 +27,19 @@ import java.io.IOException;
  * Created by Mouzitoto on 09.04.2017.
  */
 public class GreetingsScreen implements Screen {
-    DGClient dgClient;
-    SpriteBatch spriteBatch;
-    OrthographicCamera cam;
-    Stage stage;
-    Client client;
+    private Stage stage;
 
-    public GreetingsScreen(DGClient dgClient, SpriteBatch spriteBatch, OrthographicCamera cam) {
-        createNetworkClient();
 
-        this.dgClient = dgClient;
-        this.spriteBatch = spriteBatch;
-        this.cam = cam;
-
+    public GreetingsScreen(final DGClient dgClient, final SpriteBatch spriteBatch, final OrthographicCamera cam) {
         cam.position.set(cam.viewportWidth / 2, cam.viewportHeight / 2, 0);
 
-        stage = new Stage(new FitViewport(480, 600, cam));
-
+        this.stage = new Stage(new FitViewport(480, 600, cam));
+        Gdx.input.setInputProcessor(this.stage);
 
         final TextField userNameInput = new TextField("", new Skin(Gdx.files.internal("skin/uiskin.json")));
         userNameInput.setSize(150, 40);
         userNameInput.setPosition(cam.viewportWidth / 2 - 75, cam.viewportHeight / 2);
-        stage.addActor(userNameInput);
+        this.stage.addActor(userNameInput);
 
         Image enterButton = new Image(new Texture("enter-button.png"));
         enterButton.setPosition(cam.viewportWidth / 2 - 75, cam.viewportHeight / 2 - 110);
@@ -58,7 +50,8 @@ public class GreetingsScreen implements Screen {
                 Gdx.app.log("enterButton", userNameInput.getText());
 
                 try {
-                    connectToServer(userNameInput.getText());
+                    connectToServer(dgClient, userNameInput.getText());
+                    dgClient.setScreen(new LobbyScreen(dgClient, spriteBatch, cam));
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -66,31 +59,23 @@ public class GreetingsScreen implements Screen {
                 return false;
             }
         });
-        stage.addActor(enterButton);
+        this.stage.addActor(enterButton);
 
         //todo: add label at the bottom, for exception messages
 
-        Gdx.input.setInputProcessor(stage);
+
     }
 
-    private void createNetworkClient() {
-        this.client = new Client();
-        this.client.start();
 
-        Kryo kryo = this.client.getKryo();
-        kryo.register(PrivateMsg.class);
-        kryo.register(BroadCastMsg.class);
-        kryo.register(MsgState.class);
-    }
 
-    private void connectToServer(String userName) throws IOException {
-        this.client.connect(5000, "127.0.0.1", 27015);
+    private void connectToServer(DGClient dgClient, String userName) throws IOException {
+        dgClient.getClient().connect(5000, "127.0.0.1", 27015);
 
         PrivateMsg privateMsg = new PrivateMsg();
         privateMsg.setMsgState(MsgState.NEW_PLAYER);
         privateMsg.setMsg(userName);
 
-        this.client.sendTCP(privateMsg);
+        dgClient.getClient().sendTCP(privateMsg);
     }
 
 
@@ -99,7 +84,10 @@ public class GreetingsScreen implements Screen {
 
     @Override
     public void render(float delta) {
-        stage.draw();
+        Gdx.gl.glClearColor( 0, 0, 0, 1 );
+        Gdx.gl.glClear( GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT );
+
+        this.stage.draw();
     }
 
 

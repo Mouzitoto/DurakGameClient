@@ -1,5 +1,6 @@
 package kz.mouzitoto.games.network;
 
+import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
@@ -17,7 +18,6 @@ import java.util.List;
  */
 public class DGListener extends Listener {
     private DGClient dgClient;
-    private LobbyScreen lobbyScreen;
     private Gson gson = new Gson();
 
     public DGListener(DGClient dgClient) {
@@ -38,10 +38,23 @@ public class DGListener extends Listener {
                     roomsInfo(privateMsg);
                     break;
 
+                case SUCCESSFULLY_JOINED_ROOM:
+                    successfullyJoinedRoom(privateMsg);
+                    break;
+
 
 
             }
         }
+    }
+
+    private void successfullyJoinedRoom(PrivateMsg privateMsg) {
+        Room room = new Room(privateMsg.getRoomId());
+
+        Gdx.app.log("playersJson", privateMsg.getMsg());
+        //todo: parse playersJson to room.setPlayers
+
+        dgClient.getPlayer().setRoom(room);
     }
 
     private void roomsInfo(PrivateMsg privateMsg) {
@@ -51,16 +64,22 @@ public class DGListener extends Listener {
 
         Gdx.app.log("roomsInfo", privateMsg.getMsg());
 
-        lobbyScreen.setRooms(rooms);
+        dgClient.getLobbyScreen().setRooms(rooms);
     }
 
     private void handshake(PrivateMsg privateMsg) {
         dgClient.getPlayer().setId(privateMsg.getMsg());
 
-        Gdx.app.log("handshake", privateMsg.getMsg());
-    }
+//        Gdx.app.postRunnable(new Runnable() {
+//            @Override
+//            public void run() {
+//                dgClient.enterLobby();
+//            }
+//        });
 
-    public void setLobbyScreen(LobbyScreen lobbyScreen) {
-        this.lobbyScreen = lobbyScreen;
+        dgClient.enterLobby();
+
+
+        Gdx.app.log("handshake", privateMsg.getMsg());
     }
 }

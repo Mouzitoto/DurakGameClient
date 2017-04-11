@@ -13,10 +13,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.esotericsoftware.kryo.Kryo;
-import com.esotericsoftware.kryonet.Client;
 import kz.mouzitoto.games.game.MsgState;
-import kz.mouzitoto.games.network.BroadCastMsg;
 import kz.mouzitoto.games.network.DGClient;
 import kz.mouzitoto.games.network.PrivateMsg;
 
@@ -52,9 +49,7 @@ public class GreetingsScreen implements Screen {
                 try {
                     connectToServer(dgClient, userNameInput.getText());
                     dgClient.getPlayer().setName(userNameInput.getText());
-                    LobbyScreen lobbyScreen = new LobbyScreen(dgClient, spriteBatch, cam);
-                    dgClient.setScreen(lobbyScreen);
-                    dgClient.getDgListener().setLobbyScreen(lobbyScreen);
+
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

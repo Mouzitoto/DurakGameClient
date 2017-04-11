@@ -1,22 +1,12 @@
 package kz.mouzitoto.games.game;
 
-import com.esotericsoftware.kryonet.Connection;
-
-import java.util.ArrayList;
-import java.util.List;
-
 /**
- * Created by Mouzitoto on 20.03.2017.
+ * Created by Mouzitoto on 11.04.2017.
  */
 public class Player {
     private String id;
     private String name;
-    private List<Card> cards;
-    private Connection connection;
-
-    public Player() {
-        cards = new ArrayList<>();
-    }
+    private int cardsCount;
 
     public String getId() {
         return id;
@@ -31,22 +21,14 @@ public class Player {
     }
 
     public void setName(String name) {
-        this.name = name.replace(",", "");
+        this.name = name;
     }
 
-    public List<Card> getCards() {
-        return cards;
+    public int getCardsCount() {
+        return cardsCount;
     }
 
-    public void setCards(List<Card> cards) {
-        this.cards = cards;
-    }
-
-    public Connection getConnection() {
-        return connection;
-    }
-
-    public void setConnection(Connection connection) {
-        this.connection = connection;
+    public void setCardsCount(int cardsCount) {
+        this.cardsCount = cardsCount;
     }
 }

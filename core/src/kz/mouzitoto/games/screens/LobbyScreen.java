@@ -6,12 +6,16 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.utils.viewport.FitViewport;
+import kz.mouzitoto.games.game.MsgState;
 import kz.mouzitoto.games.game.Room;
 import kz.mouzitoto.games.game.RoomInfo;
 import kz.mouzitoto.games.network.DGClient;
+import kz.mouzitoto.games.network.PrivateMsg;
 
 import java.util.List;
 
@@ -25,7 +29,7 @@ public class LobbyScreen implements Screen {
     private Stage stage;
     private List<RoomInfo> rooms;
 
-    public LobbyScreen(DGClient dgClient, SpriteBatch spriteBatch, OrthographicCamera cam) {
+    public LobbyScreen(final DGClient dgClient, SpriteBatch spriteBatch, OrthographicCamera cam) {
         this.spriteBatch = spriteBatch;
         this.cam = cam;
 
@@ -36,6 +40,16 @@ public class LobbyScreen implements Screen {
         Image createButton = new Image(new Texture("create-room-button.png"));
         createButton.setPosition(cam.viewportWidth / 2 - 235, 30);
         createButton.setSize(150, 100);
+        createButton.addListener(new InputListener() {
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                PrivateMsg privateMsg = new PrivateMsg();
+                privateMsg.setMsgState(MsgState.CREATE_ROOM);
+                dgClient.getClient().sendTCP(privateMsg);
+
+                return false;
+            }
+        });
         this.stage.addActor(createButton);
 
         Image joinButton = new Image(new Texture("join-room-button.png"));

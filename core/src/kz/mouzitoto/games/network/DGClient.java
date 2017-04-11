@@ -6,23 +6,26 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.Client;
+import kz.mouzitoto.games.game.MainPlayer;
 import kz.mouzitoto.games.game.MsgState;
 import kz.mouzitoto.games.game.Player;
 import kz.mouzitoto.games.screens.GreetingsScreen;
+import kz.mouzitoto.games.screens.LobbyScreen;
 
 public class DGClient extends Game {
 	private SpriteBatch spriteBatch;
 	private OrthographicCamera cam;
 	private Client client;
 	private DGListener dgListener;
-	private Player player;
+	private MainPlayer player;
+	private LobbyScreen lobbyScreen;
 
 	@Override
 	public void create () {
 		this.spriteBatch = new SpriteBatch();
 		this.cam = new OrthographicCamera(480, 600);
 
-		this.player = new Player();
+		this.player = new MainPlayer();
 
 		createNetworkClient();
 
@@ -51,7 +54,17 @@ public class DGClient extends Game {
 		return dgListener;
 	}
 
-	public Player getPlayer() {
+	public MainPlayer getPlayer() {
 		return player;
+	}
+
+	public void enterLobby() {
+		LobbyScreen lobbyScreen = new LobbyScreen(this, spriteBatch, cam);
+		setScreen(lobbyScreen);
+		this.lobbyScreen = lobbyScreen;
+	}
+
+	public LobbyScreen getLobbyScreen() {
+		return lobbyScreen;
 	}
 }

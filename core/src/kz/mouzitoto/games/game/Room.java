@@ -1,6 +1,5 @@
 package kz.mouzitoto.games.game;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -21,6 +20,10 @@ public class Room {
     private boolean isOpen;
     private List<ChatMsg> chat;
     private Suit trump;
+
+    public Room (long id) {
+        this.id = id;
+    }
 
     public long getId() {
         return id;

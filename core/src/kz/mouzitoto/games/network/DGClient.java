@@ -59,9 +59,12 @@ public class DGClient extends Game {
 	}
 
 	public void enterLobby() {
-		LobbyScreen lobbyScreen = new LobbyScreen(this, spriteBatch, cam);
-		setScreen(lobbyScreen);
-		this.lobbyScreen = lobbyScreen;
+		this.lobbyScreen = new LobbyScreen(this, spriteBatch, cam);
+		setScreen(this.lobbyScreen);
+
+		PrivateMsg privateMsg = new PrivateMsg();
+		privateMsg.setMsgState(MsgState.ROOMS_INFO);
+		this.client.sendTCP(privateMsg);
 	}
 
 	public LobbyScreen getLobbyScreen() {

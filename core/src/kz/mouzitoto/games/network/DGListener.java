@@ -58,7 +58,6 @@ public class DGListener extends Listener {
     }
 
     private void roomsInfo(PrivateMsg privateMsg) {
-        //todo: user RoomInfo class
         Type roomsInfoListType = new TypeToken<List<RoomInfo>>(){}.getType();
         List<RoomInfo> rooms = gson.fromJson(privateMsg.getMsg(), roomsInfoListType);
 
@@ -70,15 +69,12 @@ public class DGListener extends Listener {
     private void handshake(PrivateMsg privateMsg) {
         dgClient.getPlayer().setId(privateMsg.getMsg());
 
-//        Gdx.app.postRunnable(new Runnable() {
-//            @Override
-//            public void run() {
-//                dgClient.enterLobby();
-//            }
-//        });
-
-        dgClient.enterLobby();
-
+        Gdx.app.postRunnable(new Runnable() {
+            @Override
+            public void run() {
+                dgClient.enterLobby();
+            }
+        });
 
         Gdx.app.log("handshake", privateMsg.getMsg());
     }

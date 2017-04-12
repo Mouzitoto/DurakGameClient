@@ -36,6 +36,8 @@ public class LobbyScreen implements Screen {
         this.stage = new Stage(new FitViewport(480, 600, cam));
         Gdx.input.setInputProcessor(this.stage);
 
+        final PrivateMsg privateMsg = new PrivateMsg();
+
         //buttons
         Image createButton = new Image(new Texture("create-room-button.png"));
         createButton.setPosition(cam.viewportWidth / 2 - 235, 30);
@@ -43,7 +45,6 @@ public class LobbyScreen implements Screen {
         createButton.addListener(new InputListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                PrivateMsg privateMsg = new PrivateMsg();
                 privateMsg.setMsgState(MsgState.CREATE_ROOM);
                 dgClient.getClient().sendTCP(privateMsg);
 
@@ -60,6 +61,15 @@ public class LobbyScreen implements Screen {
         Image refreshButton = new Image(new Texture("refresh-button.png"));
         refreshButton.setPosition(cam.viewportWidth / 2 + 85, 30);
         refreshButton.setSize(150, 100);
+        refreshButton.addListener(new InputListener() {
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                privateMsg.setMsgState(MsgState.ROOMS_INFO);
+                dgClient.getClient().sendTCP(privateMsg);
+
+                return false;
+            }
+        });
         this.stage.addActor(refreshButton);
 
 

@@ -9,8 +9,10 @@ import com.esotericsoftware.kryonet.Client;
 import kz.mouzitoto.games.game.MainPlayer;
 import kz.mouzitoto.games.game.MsgState;
 import kz.mouzitoto.games.game.Player;
+import kz.mouzitoto.games.game.Room;
 import kz.mouzitoto.games.screens.GreetingsScreen;
 import kz.mouzitoto.games.screens.LobbyScreen;
+import kz.mouzitoto.games.screens.RoomScreen;
 
 public class DGClient extends Game {
 	private SpriteBatch spriteBatch;
@@ -19,6 +21,8 @@ public class DGClient extends Game {
 	private DGListener dgListener;
 	private MainPlayer player;
 	private LobbyScreen lobbyScreen;
+	private RoomScreen roomScreen;
+	private Room room;
 
 	@Override
 	public void create () {
@@ -46,6 +50,38 @@ public class DGClient extends Game {
 		kryo.register(MsgState.class);
 	}
 
+	public void enterLobby() {
+		this.lobbyScreen = new LobbyScreen(this, spriteBatch, cam);
+		setScreen(this.lobbyScreen);
+
+		PrivateMsg privateMsg = new PrivateMsg();
+		privateMsg.setMsgState(MsgState.ROOMS_INFO);
+		this.client.sendTCP(privateMsg);
+	}
+
+	public void enterRoom() {
+		this.roomScreen = new RoomScreen();
+		setScreen(this.roomScreen);
+	}
+
+
+
+
+
+
+
+	public Room getRoom() {
+		return room;
+	}
+
+	public void setRoom(Room room) {
+		this.room = room;
+	}
+
+	public RoomScreen getRoomScreen() {
+		return roomScreen;
+	}
+
 	public Client getClient() {
 		return client;
 	}
@@ -56,15 +92,6 @@ public class DGClient extends Game {
 
 	public MainPlayer getPlayer() {
 		return player;
-	}
-
-	public void enterLobby() {
-		this.lobbyScreen = new LobbyScreen(this, spriteBatch, cam);
-		setScreen(this.lobbyScreen);
-
-		PrivateMsg privateMsg = new PrivateMsg();
-		privateMsg.setMsgState(MsgState.ROOMS_INFO);
-		this.client.sendTCP(privateMsg);
 	}
 
 	public LobbyScreen getLobbyScreen() {

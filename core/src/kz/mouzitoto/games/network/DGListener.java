@@ -6,6 +6,7 @@ import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import kz.mouzitoto.games.game.Player;
 import kz.mouzitoto.games.game.Room;
 import kz.mouzitoto.games.game.RoomInfo;
 import kz.mouzitoto.games.screens.LobbyScreen;
@@ -52,9 +53,14 @@ public class DGListener extends Listener {
         Room room = new Room(privateMsg.getRoomId());
 
         Gdx.app.log("playersJson", privateMsg.getMsg());
-        //todo: parse playersJson to room.setPlayers
+        Type playersListType = new TypeToken<List<Player>>(){}.getType();
+        List<Player> players = gson.fromJson(privateMsg.getMsg(), playersListType);
 
-        dgClient.getPlayer().setRoom(room);
+        room.setPlayers(players);
+
+        dgClient.setRoom(room);
+
+        Gdx.app.postRunnable(() -> dgClient.enterRoom());
     }
 
     private void roomsInfo(PrivateMsg privateMsg) {
@@ -69,12 +75,7 @@ public class DGListener extends Listener {
     private void handshake(PrivateMsg privateMsg) {
         dgClient.getPlayer().setId(privateMsg.getMsg());
 
-        Gdx.app.postRunnable(new Runnable() {
-            @Override
-            public void run() {
-                dgClient.enterLobby();
-            }
-        });
+        Gdx.app.postRunnable(() -> dgClient.enterLobby());
 
         Gdx.app.log("handshake", privateMsg.getMsg());
     }

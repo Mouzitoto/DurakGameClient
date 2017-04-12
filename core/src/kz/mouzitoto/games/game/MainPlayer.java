@@ -13,7 +13,6 @@ public class MainPlayer {
     private String name;
     private List<Card> cards;
     private Connection connection;
-    private Room room;
 
     public MainPlayer() {
         cards = new ArrayList<>();
@@ -49,13 +48,5 @@ public class MainPlayer {
 
     public void setConnection(Connection connection) {
         this.connection = connection;
-    }
-
-    public Room getRoom() {
-        return room;
-    }
-
-    public void setRoom(Room room) {
-        this.room = room;
     }
 }

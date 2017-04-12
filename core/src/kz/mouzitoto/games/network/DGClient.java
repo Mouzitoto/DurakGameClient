@@ -60,7 +60,7 @@ public class DGClient extends Game {
 	}
 
 	public void enterRoom() {
-		this.roomScreen = new RoomScreen();
+		this.roomScreen = new RoomScreen(this);
 		setScreen(this.roomScreen);
 	}
 
@@ -96,5 +96,13 @@ public class DGClient extends Game {
 
 	public LobbyScreen getLobbyScreen() {
 		return lobbyScreen;
+	}
+
+	public SpriteBatch getSpriteBatch() {
+		return spriteBatch;
+	}
+
+	public OrthographicCamera getCam() {
+		return cam;
 	}
 }
